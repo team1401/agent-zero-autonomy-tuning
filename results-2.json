@@ -1,0 +1,188 @@
+[
+  {
+    "instance": 2,
+    "trial": 0,
+    "context": "GfxInzVc",
+    "latency_seconds": 76.92675757408142,
+    "timed_out": false,
+    "state": {
+      "width": 1024,
+      "height": 768,
+      "stages": [
+        {
+          "labels": [
+            "BETA",
+            "ALPHA",
+            "GAMMA",
+            "DELTA"
+          ],
+          "target": "DELTA",
+          "coords": [
+            [
+              160,
+              199
+            ],
+            [
+              871,
+              171
+            ],
+            [
+              142,
+              452
+            ],
+            [
+              810,
+              435
+            ]
+          ],
+          "center": [
+            810,
+            435
+          ]
+        },
+        {
+          "labels": [
+            "ALPHA",
+            "GAMMA",
+            "BETA",
+            "DELTA"
+          ],
+          "target": "BETA",
+          "coords": [
+            [
+              196,
+              191
+            ],
+            [
+              780,
+              192
+            ],
+            [
+              168,
+              471
+            ],
+            [
+              835,
+              420
+            ]
+          ],
+          "center": [
+            168,
+            471
+          ]
+        }
+      ],
+      "stage": 2,
+      "clicks": [
+        {
+          "time": 1792602848.0197427,
+          "stage": 0,
+          "x": 810,
+          "y": 435,
+          "correct": true
+        },
+        {
+          "time": 1792602870.9065628,
+          "stage": 1,
+          "x": 165,
+          "y": 470,
+          "correct": true
+        }
+      ],
+      "marker": "PASS-340876"
+    }
+  },
+  {
+    "instance": 2,
+    "trial": 1,
+    "context": "H7Wk67UV",
+    "latency_seconds": 169.74303150177002,
+    "timed_out": false,
+    "state": {
+      "width": 800,
+      "height": 600,
+      "stages": [
+        {
+          "labels": [
+            "ALPHA",
+            "DELTA",
+            "GAMMA",
+            "BETA"
+          ],
+          "target": "GAMMA",
+          "coords": [
+            [
+              146,
+              179
+            ],
+            [
+              614,
+              196
+            ],
+            [
+              205,
+              394
+            ],
+            [
+              559,
+              439
+            ]
+          ],
+          "center": [
+            205,
+            394
+          ]
+        },
+        {
+          "labels": [
+            "ALPHA",
+            "BETA",
+            "GAMMA",
+            "DELTA"
+          ],
+          "target": "GAMMA",
+          "coords": [
+            [
+              203,
+              219
+            ],
+            [
+              564,
+              197
+            ],
+            [
+              152,
+              419
+            ],
+            [
+              555,
+              405
+            ]
+          ],
+          "center": [
+            152,
+            419
+          ]
+        }
+      ],
+      "stage": 2,
+      "clicks": [
+        {
+          "time": 1792602973.3073602,
+          "stage": 0,
+          "x": 200,
+          "y": 395,
+          "correct": true
+        },
+        {
+          "time": 1792603026.2987378,
+          "stage": 1,
+          "x": 160,
+          "y": 415,
+          "correct": true
+        }
+      ],
+      "marker": "PASS-981524"
+    }
+  }
+]

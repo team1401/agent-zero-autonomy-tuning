@@ -1,0 +1,94 @@
+{
+  "ok": true,
+  "presets": [
+    {
+      "name": "Default",
+      "chat": {
+        "provider": "lm_studio",
+        "name": "halogen-qwen3.8-flash-next",
+        "api_base": "http://100.108.186.69:8731/v1",
+        "ctx_length": 32768,
+        "kwargs": {
+          "temperature": 0.2,
+          "max_tokens": 4096
+        },
+        "rl_requests": 0,
+        "rl_input": 0,
+        "rl_output": 0,
+        "ctx_history": 0.7,
+        "vision": false
+      },
+      "utility": {
+        "provider": "lm_studio",
+        "name": "halogen-qwen3.8-flash-next",
+        "api_base": "http://100.108.186.69:8731/v1",
+        "ctx_length": 32768,
+        "kwargs": {
+          "temperature": 0.2,
+          "max_tokens": 4096
+        },
+        "rl_requests": 0,
+        "rl_input": 0,
+        "rl_output": 0,
+        "ctx_input": 0.7
+      },
+      "embedding": {
+        "provider": "huggingface",
+        "name": "sentence-transformers/all-MiniLM-L6-v2",
+        "api_base": "",
+        "kwargs": {
+          "model_kwargs": {
+            "local_files_only": true
+          }
+        }
+      }
+    }
+  ],
+  "global_presets": [
+    {
+      "name": "Default",
+      "chat": {
+        "provider": "lm_studio",
+        "name": "halogen-qwen3.8-flash-next",
+        "api_base": "http://100.108.186.69:8731/v1",
+        "ctx_length": 32768,
+        "kwargs": {
+          "temperature": 0.2,
+          "max_tokens": 4096
+        },
+        "rl_requests": 0,
+        "rl_input": 0,
+        "rl_output": 0,
+        "ctx_history": 0.7,
+        "vision": false
+      },
+      "utility": {
+        "provider": "lm_studio",
+        "name": "halogen-qwen3.8-flash-next",
+        "api_base": "http://100.108.186.69:8731/v1",
+        "ctx_length": 32768,
+        "kwargs": {
+          "temperature": 0.2,
+          "max_tokens": 4096
+        },
+        "rl_requests": 0,
+        "rl_input": 0,
+        "rl_output": 0,
+        "ctx_input": 0.7
+      },
+      "embedding": {
+        "provider": "huggingface",
+        "name": "sentence-transformers/all-MiniLM-L6-v2",
+        "api_base": "",
+        "kwargs": {
+          "model_kwargs": {
+            "local_files_only": true
+          }
+        }
+      }
+    }
+  ],
+  "project_presets": [],
+  "configured_preset": "Default",
+  "selected_preset": "Default"
+}

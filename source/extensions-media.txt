@@ -1,0 +1,692 @@
+from abc import abstractmethod
+from typing import Any, Awaitable, Type, cast
+from helpers import modules, files
+from helpers import cache
+from typing import TYPE_CHECKING
+from functools import wraps
+import inspect
+import os
+
+from helpers.print_style import PrintStyle
+
+if TYPE_CHECKING:
+    from agent import Agent
+
+
+DEFAULT_EXTENSIONS_FOLDER = "python/extensions"
+USER_EXTENSIONS_FOLDER = "usr/extensions"
+
+_EXTENSIONS_CACHE_AREA = "extension_folder_classes(extensions)"
+_CLASSES_CACHE_AREA = "extension_classes(extensions)"
+_WEBUI_MANIFEST_CACHE_AREA = "webui_extension_manifest(extensions)(plugins)"
+_WEBUI_MANIFEST_SUFFIXES = {
+    "html": (".html", ".htm", ".xhtml"),
+    "js": (".js", ".mjs"),
+}
+# cache.toggle_area(_EXTENSIONS_CACHE_AREA, False)
+# cache.toggle_area(_CLASSES_CACHE_AREA, False)
+
+
+class _Unset:
+    pass
+
+
+_UNSET = _Unset()
+_EXTENSIONS_LOG_COUNTS: dict[str, int] = {}
+
+
+# debug - extensions call counter
+def _log_extension_call(name: str):
+    try:
+        every = int(os.getenv("EXTENSIONS_LOG", "0"))
+    except ValueError:
+        return
+
+    if every <= 0:
+        return
+
+    _EXTENSIONS_LOG_COUNTS[name] = _EXTENSIONS_LOG_COUNTS.get(name, 0) + 1
+    _EXTENSIONS_LOG_COUNTS["_total"] = _EXTENSIONS_LOG_COUNTS.get("_total", 0) + 1
+
+    if _EXTENSIONS_LOG_COUNTS["_total"] % every == 0:
+        for key, count in _EXTENSIONS_LOG_COUNTS.items():
+            print(f"{str(count):<6} {key}")
+
+
+# decorator to enable implicit extension points in existing functions
+def extensible(func):
+    """Make a function emit two implicit extension points around its execution.
+
+    The decorator derives two extension point folder paths from the wrapped
+    function:
+
+    - ``_functions/<module path>/<qualname path>/start``
+    - ``_functions/<module path>/<qualname path>/end``
+
+    Module path segments come from ``func.__module__`` split by ``.``.
+    Qualname path segments come from the full nested ``func.__qualname__`` split
+    by ``.``, excluding ``<locals>``.
+
+    Example:
+
+    - module ``helpers.something``
+    - qualname ``Outer.Inner.__init__``
+
+    becomes:
+
+    - ``_functions/helpers/something/Outer/Inner/__init__/start``
+    - ``_functions/helpers/something/Outer/Inner/__init__/end``
+
+    When the wrapped function is called, the decorator builds a mutable ``data``
+    payload and passes it to both extension points:
+
+    - ``data["args"]``: positional args (extensions may replace/mutate)
+    - ``data["kwargs"]``: keyword args (extensions may replace/mutate)
+    - ``data["result"]``: initialized to an internal sentinel; extensions may set
+      this to short-circuit the wrapped function
+    - ``data["exception"]``: initialized to an internal sentinel; extensions may
+      set this to a ``BaseException`` instance to force-raise
+
+    Sync functions call ``call_extensions_sync``. Async functions call
+    ``call_extensions_async``.
+
+    Behavior:
+
+    - ``start`` extensions run first and may mutate inputs or set
+      ``data["result"]`` / ``data["exception"]``.
+    - If ``data["result"]`` is still unset, the decorator calls the wrapped
+      function using the possibly modified ``data["args"]`` / ``data["kwargs"]``.
+    - ``end`` extensions run last and may rewrite ``data["result"]`` or replace /
+      clear ``data["exception"]``.
+
+    Finally, if ``data["exception"]`` contains an exception it is raised;
+    otherwise ``data["result"]`` is returned.
+    """
+
+    def _get_agent(args, kwargs):
+        from agent import Agent
+
+        candidate = kwargs.get("agent")
+        if isinstance(candidate, Agent) and bool(getattr(candidate, "__dict__", None)):
+            return candidate
+
+        for a in args:
+            if isinstance(a, Agent) and bool(getattr(a, "__dict__", None)):
+                return a
+
+        return None
+
+    def _prepare_inputs(args, kwargs):
+        module_name = getattr(func, "__module__", "")
+        qual_name = getattr(func, "__qualname__", "")
+        if not module_name or not qual_name:
+            return None
+
+        module_parts = [part for part in module_name.split(".") if part]
+        qual_parts = [part for part in qual_name.split(".") if part and part != "<locals>"]
+        if not module_parts or not qual_parts:
+            return None
+
+        base_path = os.path.join("_functions", *module_parts, *qual_parts)
+        start_point = os.path.join(base_path, "start")
+        end_point = os.path.join(base_path, "end")
+
+        agent = _get_agent(args, kwargs)
+
+        data = {
+            "args": args,
+            "kwargs": kwargs,
+            "result": _UNSET,
+            "exception": None,
+        }
+
+        return start_point, end_point, agent, data
+
+    def _process_result(data):
+        exc = data.get("exception")
+        if isinstance(exc, BaseException):
+            raise exc
+
+        return data.get("result")
+
+    def _call_original(data):
+        call_args = data.get("args")
+        call_kwargs = data.get("kwargs")
+
+        if not isinstance(call_args, tuple):
+            call_args = (call_args,)
+        if not isinstance(call_kwargs, dict):
+            call_kwargs = {}
+
+        try:
+            data["result"] = func(*call_args, **call_kwargs)
+        except Exception as e:
+            data["exception"] = e
+            return _UNSET
+
+    async def _run_async(*args, **kwargs):
+        prepared = _prepare_inputs(args, kwargs)
+        if prepared is None:
+            return await func(*args, **kwargs)
+
+        start_point, end_point, agent, data = prepared
+
+        # call pre-extensions
+        await call_extensions_async(start_point, agent=agent, data=data)
+
+        # call the original if pre-extensions don't return a result
+        if (result := _process_result(data)) is _UNSET:
+            _call_original(data)
+            try:
+                data["result"] = await data["result"]
+            except Exception as e:
+                data["exception"] = e
+
+        # call post-extensions
+        await call_extensions_async(end_point, agent=agent, data=data)
+
+        result = _process_result(data)
+        return None if result is _UNSET else result
+
+    def _run_sync(*args, **kwargs):
+        prepared = _prepare_inputs(args, kwargs)
+        if prepared is None:
+            return func(*args, **kwargs)
+
+        start_point, end_point, agent, data = prepared
+
+        # call pre-extensions
+        call_extensions_sync(start_point, agent=agent, data=data)
+
+        # call the original if pre-extensions don't return a result
+        if (result := _process_result(data)) is _UNSET:
+            _call_original(data)
+
+        # call post-extensions
+        call_extensions_sync(end_point, agent=agent, data=data)
+
+        result = _process_result(data)
+        return None if result is _UNSET else result
+
+    if inspect.iscoroutinefunction(func):
+        return wraps(func)(_run_async)
+
+    return wraps(func)(_run_sync)
+
+
+class Extension:
+
+    def __init__(self, agent: "Agent|None", **kwargs):
+        self.agent: "Agent|None" = agent
+        self.kwargs = kwargs
+
+    @abstractmethod
+    def execute(self, **kwargs) -> None | Awaitable[None]:
+        pass
+
+
+async def call_extensions_async(
+    extension_point: str, agent: "Agent|None" = None, **kwargs
+):
+    _log_extension_call(extension_point)
+
+    # fetch classes for this extension point and agent
+    classes = _get_extension_classes(extension_point, agent=agent, **kwargs)
+
+    # execute unique extensions
+    for cls in classes:
+        result = cls(agent=agent).execute(**kwargs)
+        if isinstance(result, Awaitable):
+            await result
+
+
+def call_extensions_sync(extension_point: str, agent: "Agent|None" = None, **kwargs):
+    _log_extension_call(extension_point)
+
+    # fetch classes for this extension point and agent
+    classes = _get_extension_classes(extension_point, agent=agent, **kwargs)
+
+    # execute unique extensions
+    for cls in classes:
+        result = cls(agent=agent).execute(**kwargs)
+        if isinstance(result, Awaitable):
+            raise ValueError(
+                f"Extension {cls.__name__} returned awaitable in sync mode"
+            )
+
+
+def get_webui_extensions(
+    agent: "Agent | None", extension_point: str, filters: list[str] | None = None
+):
+    from helpers import subagents
+
+    entries: list[str] = []
+    effective_filters = filters or ["*"]
+
+    # search for extension folders in all agent's paths
+    folders = subagents.get_paths(
+        agent,
+        "extensions/webui",
+        extension_point,
+    )
+
+    extensions = []
+
+    for folder in folders:
+        for filter in effective_filters:
+            pattern = files.get_abs_path(folder, filter)
+            extensions.extend(files.find_existing_paths_by_pattern(pattern))
+
+    for extension in extensions:
+        rel_path = files.deabsolute_path(extension)
+        entries.append(rel_path)
+
+    return entries
+
+
+def get_webui_extension_manifest(
+    agent: "Agent | None",
+) -> dict[str, dict[str, list[str]]]:
+    """Return every WebUI extension URL grouped by asset type and extension point."""
+    from helpers import subagents
+
+    cache_key = cache.determine_cache_key(agent)
+    cached = cache.get(_WEBUI_MANIFEST_CACHE_AREA, cache_key)
+    if cached is not None:
+        return cached
+
+    manifest: dict[str, dict[str, list[str]]] = {
+        asset_type: {} for asset_type in _WEBUI_MANIFEST_SUFFIXES
+    }
+    roots = subagents.get_paths(agent, "extensions/webui")
+    for root in roots:
+        relative_files = sorted(files.list_files_in_dir_recursively(root))
+        for asset_type, suffixes in _WEBUI_MANIFEST_SUFFIXES.items():
+            for suffix in suffixes:
+                for relative_file in relative_files:
+                    if not relative_file.lower().endswith(suffix):
+                        continue
+                    extension_point = os.path.dirname(relative_file).replace(
+                        os.sep, "/"
+                    )
+                    if not extension_point or extension_point == ".":
+                        continue
+                    absolute_path = files.get_abs_path(root, relative_file)
+                    relative_path = files.deabsolute_path(absolute_path).replace(
+                        os.sep, "/"
+                    )
+                    manifest[asset_type].setdefault(extension_point, []).append(
+                        "/" + relative_path.lstrip("/")
+                    )
+
+    cache.add(_WEBUI_MANIFEST_CACHE_AREA, cache_key, manifest)
+    return manifest
+
+
+def _get_extension_classes(
+    extension_point: str, agent: "Agent|None" = None, **kwargs
+) -> list[Type[Extension]]:
+    from helpers import subagents
+
+    cache_key = cache.determine_cache_key(agent, extension_point)
+    cached = cache.get(_CLASSES_CACHE_AREA, cache_key)
+    if cached is not None:
+        return cached
+
+    # search for extension folders in all agent's paths
+    paths = subagents.get_paths(agent, "extensions/python", extension_point)
+
+    all_exts = [cls for path in paths for cls in _get_extensions(path)]
+
+    # merge: first ocurrence of file name is the override
+    unique = {}
+    for cls in all_exts:
+        file = _get_file_from_module(cls.__module__)
+        if file not in unique:
+            unique[file] = cls
+    classes = sorted(
+        unique.values(), key=lambda cls: _get_file_from_module(cls.__module__)
+    )
+    cache.add(_CLASSES_CACHE_AREA, cache_key, classes)
+    return classes
+
+
+def _get_file_from_module(module_name: str) -> str:
+    return module_name.split(".")[-1]
+
+
+def _get_extensions(folder: str):
+    folder = files.get_abs_path(folder)
+    cached = cache.get(_EXTENSIONS_CACHE_AREA, folder)
+    if cached is not None:
+        return cached
+
+    if not files.exists(folder):
+        return []
+
+    classes = modules.load_classes_from_folder(folder, "*", Extension)
+    cache.add(_EXTENSIONS_CACHE_AREA, folder, classes)
+    return classes
+
+
+def register_extensions_watchdogs():
+    from helpers import watchdog, projects
+
+    def extensions_changed(items: list[watchdog.WatchItem]):
+        cache.clear(_EXTENSIONS_CACHE_AREA)
+        cache.clear(_CLASSES_CACHE_AREA)
+        PrintStyle.debug("Extensions watchdog triggered:", items)
+
+    # extensions and usr/extensions
+    watchdog.add_watchdog(
+        id="extensions_base",
+        roots=[
+            files.get_abs_path(files.EXTENSIONS_DIR),
+            files.get_abs_path(files.USER_DIR, files.EXTENSIONS_DIR),
+        ],
+        handler=extensions_changed,
+    )
+
+    # usr/projects/**/extensions
+    watchdog.add_watchdog(
+        id="extensions_projects",
+        roots=[projects.PROJECTS_PARENT_DIR],
+        patterns=[f"*/{projects.PROJECT_META_DIR}/**/{files.EXTENSIONS_DIR}/**/*"],
+        handler=extensions_changed,
+    )
+
+    # agents and usr/agents
+    watchdog.add_watchdog(
+        id="extensions_agents",
+        roots=[
+            files.get_abs_path(files.AGENTS_DIR),
+            files.get_abs_path(files.USER_DIR, files.AGENTS_DIR),
+        ],
+        patterns=[f"*/{files.EXTENSIONS_DIR}/**/*"],
+        handler=extensions_changed,
+    )
+# Tool Execute After Extensions DOX
+
+## Purpose
+
+- Own backend processing immediately after tool execution.
+
+## Ownership
+
+- Ordered Python files own post-tool secret masking and future tool-result postprocessing.
+
+## Local Contracts
+
+- Mask secrets before tool results reach history, UI, or model-visible context.
+- Do not alter tool `break_loop` or response semantics unless the hook contract owns that behavior.
+
+## Work Guidance
+
+- Coordinate with tool implementations and history hooks when changing tool result data.
+
+## Verification
+
+- Smoke-test tool execution with sensitive output after changes.
+
+## Child DOX Index
+
+No child DOX files.
+from helpers.extension import Extension
+from helpers.secrets import get_secrets_manager
+from helpers.tool import Response
+
+
+class MaskToolSecrets(Extension):
+
+    async def execute(self, response: Response | None = None, **kwargs):
+        if not self.agent:
+            return
+
+        if not response:
+            return
+        secrets_mgr = get_secrets_manager(self.agent.context)
+        response.message = secrets_mgr.mask_values(response.message)
+from __future__ import annotations
+
+import time
+import uuid
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Literal
+
+from helpers import files, media_artifacts
+
+
+DEFAULT_MAX_IMAGE_BYTES = media_artifacts.DEFAULT_MAX_ARTIFACT_SIZE_BYTES
+ImageCategory = Literal["images", "screenshots"]
+
+
+@dataclass(frozen=True)
+class ChatImage:
+    path: str
+    a0_path: str
+    mime: str
+    size: int
+
+
+def screenshot_dir(context_id: str, source: str) -> Path:
+    return artifact_dir(context_id, category="screenshots", source=source)
+
+
+def artifact_dir(
+    context_id: str,
+    *,
+    category: ImageCategory = "images",
+    source: str = "vision-load",
+) -> Path:
+    context_segment = files.safe_file_name(str(context_id or "default")).strip("._") or "default"
+    safe_category = files.safe_file_name(category).strip("._") or "images"
+    safe_source = files.safe_file_name(source).strip("._") or "vision-load"
+
+    return Path(files.get_abs_path("usr/chats", context_segment)) / safe_category / safe_source
+
+
+def save_image_bytes(
+    *,
+    context_id: str,
+    payload: bytes,
+    mime_type: str = "image/png",
+    category: ImageCategory = "images",
+    source: str = "vision-load",
+    preferred_name: str = "",
+    max_bytes: int | None = DEFAULT_MAX_IMAGE_BYTES,
+) -> ChatImage:
+    data = bytes(payload or b"")
+    if not data:
+        raise media_artifacts.EmptyBase64Data("image payload is empty")
+    if max_bytes is not None and len(data) > max_bytes:
+        raise media_artifacts.ArtifactTooLarge(len(data), max_bytes)
+
+    safe_mime = media_artifacts.normalize_mime(
+        mime_type,
+        default="image/png",
+        required_prefix="image/",
+    )
+    default_extension = media_artifacts.guess_extension(safe_mime, ".png")
+    default_filename = f"{source or 'image'}{default_extension}"
+    filename = media_artifacts.safe_filename(
+        preferred_name,
+        default=default_filename,
+        default_extension=default_extension,
+    )
+    filename_path = Path(filename)
+    stem = filename_path.stem or Path(default_filename).stem or "image"
+    suffix = filename_path.suffix or default_extension
+    timestamp = time.strftime("%Y%m%d-%H%M%S")
+    path = artifact_dir(context_id, category=category, source=source) / (
+        f"{stem}-{timestamp}-{uuid.uuid4().hex[:8]}{suffix}"
+    )
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_bytes(data)
+    return ChatImage(
+        path=str(path),
+        a0_path=files.normalize_a0_path(str(path)),
+        mime=safe_mime,
+        size=len(data),
+    )
+
+
+def save_image_base64(
+    *,
+    context_id: str,
+    data: str,
+    mime_type: str = "image/png",
+    category: ImageCategory = "images",
+    source: str = "vision-load",
+    preferred_name: str = "",
+    max_bytes: int | None = DEFAULT_MAX_IMAGE_BYTES,
+) -> ChatImage:
+    payload = media_artifacts.decode_base64_payload(data, max_bytes=max_bytes)
+    return save_image_bytes(
+        context_id=context_id,
+        payload=payload.payload,
+        mime_type=mime_type,
+        category=category,
+        source=source,
+        preferred_name=preferred_name,
+        max_bytes=max_bytes,
+    )
+
+
+def save_image_file(
+    *,
+    context_id: str,
+    path: str | Path,
+    category: ImageCategory = "images",
+    source: str = "vision-load",
+    preferred_name: str = "",
+    max_bytes: int | None = DEFAULT_MAX_IMAGE_BYTES,
+) -> ChatImage:
+    image_path = Path(path)
+    payload = image_path.read_bytes()
+    mime = media_artifacts.normalize_mime(
+        _guess_image_mime(image_path),
+        default="image/png",
+        required_prefix="image/",
+    )
+    return save_image_bytes(
+        context_id=context_id,
+        payload=payload,
+        mime_type=mime,
+        category=category,
+        source=source,
+        preferred_name=preferred_name or image_path.name,
+        max_bytes=max_bytes,
+    )
+
+
+def save_image_data_url(
+    *,
+    context_id: str,
+    data_url: str,
+    category: ImageCategory = "images",
+    source: str = "vision-load",
+    preferred_name: str = "",
+    max_bytes: int | None = DEFAULT_MAX_IMAGE_BYTES,
+) -> ChatImage:
+    header, encoded = _split_image_data_url(data_url)
+    mime = header.removeprefix("data:").split(";", 1)[0] or "image/png"
+    return save_image_base64(
+        context_id=context_id,
+        data=encoded,
+        mime_type=mime,
+        category=category,
+        source=source,
+        preferred_name=preferred_name,
+        max_bytes=max_bytes,
+    )
+
+
+def materialize_image_ref(
+    *,
+    context_id: str,
+    url: str,
+    source: str = "",
+    preferred_name: str = "",
+    max_bytes: int | None = DEFAULT_MAX_IMAGE_BYTES,
+) -> str:
+    value = str(url or "").strip()
+    if not value or not str(context_id or "").strip():
+        return value
+
+    resolved_source = source or infer_source(value, preferred_name)
+    category = category_for_source(resolved_source)
+    if _is_data_image_url(value):
+        saved = save_image_data_url(
+            context_id=context_id,
+            data_url=value,
+            category=category,
+            source=resolved_source,
+            preferred_name=preferred_name,
+            max_bytes=max_bytes,
+        )
+        return saved.a0_path
+
+    from helpers import images
+
+    source_path = images.resolve_ref(value)
+    if is_chat_scoped_path(context_id=context_id, path=source_path):
+        return files.normalize_a0_path(str(source_path))
+    saved = save_image_file(
+        context_id=context_id,
+        path=source_path,
+        category=category,
+        source=resolved_source,
+        preferred_name=preferred_name or source_path.name,
+        max_bytes=max_bytes,
+    )
+    return saved.a0_path
+
+
+def is_chat_scoped_path(*, context_id: str, path: str | Path) -> bool:
+    if not str(context_id or "").strip():
+        return False
+    try:
+        target = Path(path).resolve(strict=False)
+        root = artifact_dir(context_id, category="images", source="vision-load").parents[1].resolve(strict=False)
+        return target == root or root in target.parents
+    except OSError:
+        return False
+
+
+def infer_source(value: str = "", preferred_name: str = "") -> str:
+    raw = f"{value or ''} {preferred_name or ''}".lower()
+    if "computer-use" in raw or "computer_use" in raw or "_a0_connector/computer_use" in raw:
+        return "computer-use"
+    if "/desktop/screenshots/" in raw or "\\desktop\\screenshots\\" in raw or "desktop-" in raw:
+        return "desktop"
+    if (
+        "/browser/screenshots/" in raw
+        or "\\browser\\screenshots\\" in raw
+        or "host-browser" in raw
+        or "browser-" in raw
+    ):
+        return "browser"
+    return "vision-load"
+
+
+def category_for_source(source: str) -> ImageCategory:
+    return "screenshots" if source in {"desktop", "browser", "computer-use"} else "images"
+
+
+def _guess_image_mime(path: Path) -> str:
+    import mimetypes
+
+    return mimetypes.guess_type(path.name)[0] or "image/png"
+
+
+def _is_data_image_url(value: str) -> bool:
+    normalized = str(value or "").strip().lower()
+    return normalized.startswith("data:image/") and ";base64," in normalized
+
+
+def _split_image_data_url(data_url: str) -> tuple[str, str]:
+    value = str(data_url or "").strip()
+    if not _is_data_image_url(value) or "," not in value:
+        raise ValueError("image data URL must be data:image/*;base64,...")
+    return value.split(",", 1)

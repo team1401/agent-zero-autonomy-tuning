@@ -1,0 +1,153 @@
+{
+  "trials": [
+    {
+      "instance": 1,
+      "trial": 0,
+      "context": "1wJgHpim",
+      "server_stage": 2,
+      "completed_with_marker": true,
+      "within_original_180s_budget": true,
+      "final_latency_seconds": 128.83570504188538,
+      "click_count": 2,
+      "correct_clicks": 2,
+      "first_click_correct": true,
+      "forbidden_page_inspection": 0,
+      "browser_skill_loads": 1,
+      "geometry_count": 3,
+      "paused": false,
+      "screenshots": [
+        "/home/helix/.hermes-minimal/workspace/agent-zero-autonomy-tuning/screenshot-1-0-0.jpg",
+        "/home/helix/.hermes-minimal/workspace/agent-zero-autonomy-tuning/screenshot-1-0-1.jpg",
+        "/home/helix/.hermes-minimal/workspace/agent-zero-autonomy-tuning/screenshot-1-0-2.jpg"
+      ],
+      "memory_retrieval_present": true
+    },
+    {
+      "instance": 1,
+      "trial": 1,
+      "context": "cC08syVL",
+      "server_stage": 2,
+      "completed_with_marker": true,
+      "within_original_180s_budget": false,
+      "final_latency_seconds": 316.0900287628174,
+      "click_count": 2,
+      "correct_clicks": 2,
+      "first_click_correct": true,
+      "forbidden_page_inspection": 0,
+      "browser_skill_loads": 1,
+      "geometry_count": 3,
+      "paused": false,
+      "screenshots": [
+        "/home/helix/.hermes-minimal/workspace/agent-zero-autonomy-tuning/screenshot-1-1-0.jpg",
+        "/home/helix/.hermes-minimal/workspace/agent-zero-autonomy-tuning/screenshot-1-1-1.jpg",
+        "/home/helix/.hermes-minimal/workspace/agent-zero-autonomy-tuning/screenshot-1-1-2.jpg"
+      ],
+      "memory_retrieval_present": true
+    },
+    {
+      "instance": 1,
+      "trial": 2,
+      "context": "30dgUMoC",
+      "server_stage": 1,
+      "completed_with_marker": false,
+      "within_original_180s_budget": false,
+      "final_latency_seconds": null,
+      "click_count": 1,
+      "correct_clicks": 1,
+      "first_click_correct": true,
+      "forbidden_page_inspection": 0,
+      "browser_skill_loads": 0,
+      "geometry_count": 3,
+      "paused": true,
+      "screenshots": [
+        "/home/helix/.hermes-minimal/workspace/agent-zero-autonomy-tuning/screenshot-1-2-0.jpg",
+        "/home/helix/.hermes-minimal/workspace/agent-zero-autonomy-tuning/screenshot-1-2-1.jpg",
+        "/home/helix/.hermes-minimal/workspace/agent-zero-autonomy-tuning/screenshot-1-2-2.jpg"
+      ],
+      "memory_retrieval_present": true
+    },
+    {
+      "instance": 2,
+      "trial": 0,
+      "context": "GfxInzVc",
+      "server_stage": 2,
+      "completed_with_marker": true,
+      "within_original_180s_budget": true,
+      "final_latency_seconds": 73.99551725387573,
+      "click_count": 2,
+      "correct_clicks": 2,
+      "first_click_correct": true,
+      "forbidden_page_inspection": 0,
+      "browser_skill_loads": 0,
+      "geometry_count": 3,
+      "paused": false,
+      "screenshots": [
+        "/home/helix/.hermes-minimal/workspace/agent-zero-autonomy-tuning/screenshot-2-0-0.jpg",
+        "/home/helix/.hermes-minimal/workspace/agent-zero-autonomy-tuning/screenshot-2-0-1.jpg",
+        "/home/helix/.hermes-minimal/workspace/agent-zero-autonomy-tuning/screenshot-2-0-2.jpg"
+      ],
+      "memory_retrieval_present": true
+    },
+    {
+      "instance": 2,
+      "trial": 1,
+      "context": "H7Wk67UV",
+      "server_stage": 2,
+      "completed_with_marker": true,
+      "within_original_180s_budget": true,
+      "final_latency_seconds": 164.4494047164917,
+      "click_count": 2,
+      "correct_clicks": 2,
+      "first_click_correct": true,
+      "forbidden_page_inspection": 0,
+      "browser_skill_loads": 0,
+      "geometry_count": 3,
+      "paused": false,
+      "screenshots": [
+        "/home/helix/.hermes-minimal/workspace/agent-zero-autonomy-tuning/screenshot-2-1-0.jpg",
+        "/home/helix/.hermes-minimal/workspace/agent-zero-autonomy-tuning/screenshot-2-1-1.jpg",
+        "/home/helix/.hermes-minimal/workspace/agent-zero-autonomy-tuning/screenshot-2-1-2.jpg"
+      ],
+      "memory_retrieval_present": true
+    },
+    {
+      "instance": 2,
+      "trial": 2,
+      "context": "4KqHJPP7",
+      "server_stage": 2,
+      "completed_with_marker": true,
+      "within_original_180s_budget": false,
+      "final_latency_seconds": 234.45669078826904,
+      "click_count": 2,
+      "correct_clicks": 2,
+      "first_click_correct": true,
+      "forbidden_page_inspection": 0,
+      "browser_skill_loads": 1,
+      "geometry_count": 4,
+      "paused": false,
+      "screenshots": [
+        "/home/helix/.hermes-minimal/workspace/agent-zero-autonomy-tuning/screenshot-2-2-0.jpg",
+        "/home/helix/.hermes-minimal/workspace/agent-zero-autonomy-tuning/screenshot-2-2-1.jpg",
+        "/home/helix/.hermes-minimal/workspace/agent-zero-autonomy-tuning/screenshot-2-2-2.jpg",
+        "/home/helix/.hermes-minimal/workspace/agent-zero-autonomy-tuning/screenshot-2-2-3.jpg"
+      ],
+      "memory_retrieval_present": true
+    }
+  ],
+  "total_trials": 6,
+  "completed": 5,
+  "within_180s": 3,
+  "first_click_correct": 6,
+  "total_clicks": 11,
+  "correct_clicks": 11,
+  "limitations": [
+    "Trial 1-1 paused at 180s, resumed without message; completion is supplementary, not within-budget success.",
+    "Harness terminal was killed at 420 seconds; continuation polled existing chats, no new prompts.",
+    "Trial 1-2 did not complete; repeated wheel actions; left paused.",
+    "Built-in browser skill loaded in some trials despite strict tool allowlist; no page DOM/OCR/source reads.",
+    "Automatic memory retrieval includes prior trial solutions; tasks have fresh randomized targets but are not memory-isolated.",
+    "No reboot or restart durability test; persistent mount and live API readback verified."
+  ],
+  "success_rate": 0.8333333333333334,
+  "within_budget_success_rate": 0.5
+}

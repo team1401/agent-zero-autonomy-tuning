@@ -1,0 +1,211 @@
+[
+  {
+    "instance": 1,
+    "trial": 0,
+    "local": "/home/helix/.hermes-minimal/workspace/agent-zero-autonomy-tuning/screenshot-1-0-0.jpg",
+    "remote": "/a0/usr/chats/1wJgHpim/screenshots/browser/browser-3-20261021-171417-4f854428.jpg",
+    "geometry": {
+      "screenshot_width_pixels": 1024,
+      "screenshot_height_pixels": 768,
+      "instructions": "Load this screenshot with vision_load. For viewport screenshots, origin (0,0) is top-left of page content, NOT browser chrome. Browser click x/y use viewport CSS pixels; default device scale is 1. Estimate target center as fractions of this complete image width/height and convert to native pixels; do not use normalized 0..1000 coordinates or invent offsets. If model image preprocessing rescales the image, preserve the fractions and map back to the native dimensions above. Use full_page=false for clicking. Identify target from pixels, click once, then take and load a NEW screenshot to verify actual state change. After a miss re-estimate from fresh pixels; never repeat an unchanged failed coordinate. Stop after at most 4 clicks without success and report the limitation honestly. Never infer success from a click return alone."
+    }
+  },
+  {
+    "instance": 1,
+    "trial": 0,
+    "local": "/home/helix/.hermes-minimal/workspace/agent-zero-autonomy-tuning/screenshot-1-0-1.jpg",
+    "remote": "/a0/usr/chats/1wJgHpim/screenshots/browser/browser-3-20261021-171444-c3fac3d4.jpg",
+    "geometry": {
+      "screenshot_width_pixels": 1024,
+      "screenshot_height_pixels": 768,
+      "instructions": "Load this screenshot with vision_load. For viewport screenshots, origin (0,0) is top-left of page content, NOT browser chrome. Browser click x/y use viewport CSS pixels; default device scale is 1. Estimate target center as fractions of this complete image width/height and convert to native pixels; do not use normalized 0..1000 coordinates or invent offsets. If model image preprocessing rescales the image, preserve the fractions and map back to the native dimensions above. Use full_page=false for clicking. Identify target from pixels, click once, then take and load a NEW screenshot to verify actual state change. After a miss re-estimate from fresh pixels; never repeat an unchanged failed coordinate. Stop after at most 4 clicks without success and report the limitation honestly. Never infer success from a click return alone."
+    }
+  },
+  {
+    "instance": 1,
+    "trial": 0,
+    "local": "/home/helix/.hermes-minimal/workspace/agent-zero-autonomy-tuning/screenshot-1-0-2.jpg",
+    "remote": "/a0/usr/chats/1wJgHpim/screenshots/browser/browser-3-20261021-171523-00d28b84.jpg",
+    "geometry": {
+      "screenshot_width_pixels": 1024,
+      "screenshot_height_pixels": 768,
+      "instructions": "Load this screenshot with vision_load. For viewport screenshots, origin (0,0) is top-left of page content, NOT browser chrome. Browser click x/y use viewport CSS pixels; default device scale is 1. Estimate target center as fractions of this complete image width/height and convert to native pixels; do not use normalized 0..1000 coordinates or invent offsets. If model image preprocessing rescales the image, preserve the fractions and map back to the native dimensions above. Use full_page=false for clicking. Identify target from pixels, click once, then take and load a NEW screenshot to verify actual state change. After a miss re-estimate from fresh pixels; never repeat an unchanged failed coordinate. Stop after at most 4 clicks without success and report the limitation honestly. Never infer success from a click return alone."
+    }
+  },
+  {
+    "instance": 1,
+    "trial": 1,
+    "local": "/home/helix/.hermes-minimal/workspace/agent-zero-autonomy-tuning/screenshot-1-1-0.jpg",
+    "remote": "/a0/usr/chats/cC08syVL/screenshots/browser/browser-4-20261021-171710-69b6bd50.jpg",
+    "geometry": {
+      "screenshot_width_pixels": 800,
+      "screenshot_height_pixels": 600,
+      "instructions": "Load this screenshot with vision_load. For viewport screenshots, origin (0,0) is top-left of page content, NOT browser chrome. Browser click x/y use viewport CSS pixels; default device scale is 1. Estimate target center as fractions of this complete image width/height and convert to native pixels; do not use normalized 0..1000 coordinates or invent offsets. If model image preprocessing rescales the image, preserve the fractions and map back to the native dimensions above. Use full_page=false for clicking. Identify target from pixels, click once, then take and load a NEW screenshot to verify actual state change. After a miss re-estimate from fresh pixels; never repeat an unchanged failed coordinate. Stop after at most 4 clicks without success and report the limitation honestly. Never infer success from a click return alone."
+    }
+  },
+  {
+    "instance": 1,
+    "trial": 1,
+    "local": "/home/helix/.hermes-minimal/workspace/agent-zero-autonomy-tuning/screenshot-1-1-1.jpg",
+    "remote": "/a0/usr/chats/cC08syVL/screenshots/browser/browser-4-20261021-171743-856180bd.jpg",
+    "geometry": {
+      "screenshot_width_pixels": 800,
+      "screenshot_height_pixels": 600,
+      "instructions": "Load this screenshot with vision_load. For viewport screenshots, origin (0,0) is top-left of page content, NOT browser chrome. Browser click x/y use viewport CSS pixels; default device scale is 1. Estimate target center as fractions of this complete image width/height and convert to native pixels; do not use normalized 0..1000 coordinates or invent offsets. If model image preprocessing rescales the image, preserve the fractions and map back to the native dimensions above. Use full_page=false for clicking. Identify target from pixels, click once, then take and load a NEW screenshot to verify actual state change. After a miss re-estimate from fresh pixels; never repeat an unchanged failed coordinate. Stop after at most 4 clicks without success and report the limitation honestly. Never infer success from a click return alone."
+    }
+  },
+  {
+    "instance": 1,
+    "trial": 1,
+    "local": "/home/helix/.hermes-minimal/workspace/agent-zero-autonomy-tuning/screenshot-1-1-2.jpg",
+    "remote": "/a0/usr/chats/cC08syVL/screenshots/browser/browser-4-20261021-171858-404b835e.jpg",
+    "geometry": {
+      "screenshot_width_pixels": 800,
+      "screenshot_height_pixels": 600,
+      "instructions": "Load this screenshot with vision_load. For viewport screenshots, origin (0,0) is top-left of page content, NOT browser chrome. Browser click x/y use viewport CSS pixels; default device scale is 1. Estimate target center as fractions of this complete image width/height and convert to native pixels; do not use normalized 0..1000 coordinates or invent offsets. If model image preprocessing rescales the image, preserve the fractions and map back to the native dimensions above. Use full_page=false for clicking. Identify target from pixels, click once, then take and load a NEW screenshot to verify actual state change. After a miss re-estimate from fresh pixels; never repeat an unchanged failed coordinate. Stop after at most 4 clicks without success and report the limitation honestly. Never infer success from a click return alone."
+    }
+  },
+  {
+    "instance": 1,
+    "trial": 2,
+    "local": "/home/helix/.hermes-minimal/workspace/agent-zero-autonomy-tuning/screenshot-1-2-0.jpg",
+    "remote": "/a0/usr/chats/30dgUMoC/screenshots/browser/browser-5-20261021-171932-42bd4b9b.jpg",
+    "geometry": {
+      "screenshot_width_pixels": 900,
+      "screenshot_height_pixels": 700,
+      "instructions": "Load this screenshot with vision_load. For viewport screenshots, origin (0,0) is top-left of page content, NOT browser chrome. Browser click x/y use viewport CSS pixels; default device scale is 1. Estimate target center as fractions of this complete image width/height and convert to native pixels; do not use normalized 0..1000 coordinates or invent offsets. If model image preprocessing rescales the image, preserve the fractions and map back to the native dimensions above. Use full_page=false for clicking. Identify target from pixels, click once, then take and load a NEW screenshot to verify actual state change. After a miss re-estimate from fresh pixels; never repeat an unchanged failed coordinate. Stop after at most 4 clicks without success and report the limitation honestly. Never infer success from a click return alone."
+    }
+  },
+  {
+    "instance": 1,
+    "trial": 2,
+    "local": "/home/helix/.hermes-minimal/workspace/agent-zero-autonomy-tuning/screenshot-1-2-1.jpg",
+    "remote": "/a0/usr/chats/30dgUMoC/screenshots/browser/browser-5-20261021-172006-7722cff3.jpg",
+    "geometry": {
+      "screenshot_width_pixels": 900,
+      "screenshot_height_pixels": 700,
+      "instructions": "Load this screenshot with vision_load. For viewport screenshots, origin (0,0) is top-left of page content, NOT browser chrome. Browser click x/y use viewport CSS pixels; default device scale is 1. Estimate target center as fractions of this complete image width/height and convert to native pixels; do not use normalized 0..1000 coordinates or invent offsets. If model image preprocessing rescales the image, preserve the fractions and map back to the native dimensions above. Use full_page=false for clicking. Identify target from pixels, click once, then take and load a NEW screenshot to verify actual state change. After a miss re-estimate from fresh pixels; never repeat an unchanged failed coordinate. Stop after at most 4 clicks without success and report the limitation honestly. Never infer success from a click return alone."
+    }
+  },
+  {
+    "instance": 1,
+    "trial": 2,
+    "local": "/home/helix/.hermes-minimal/workspace/agent-zero-autonomy-tuning/screenshot-1-2-2.jpg",
+    "remote": "/a0/usr/chats/30dgUMoC/screenshots/browser/browser-5-20261021-172039-02112b66.jpg",
+    "geometry": {
+      "screenshot_width_pixels": 900,
+      "screenshot_height_pixels": 700,
+      "instructions": "Load this screenshot with vision_load. For viewport screenshots, origin (0,0) is top-left of page content, NOT browser chrome. Browser click x/y use viewport CSS pixels; default device scale is 1. Estimate target center as fractions of this complete image width/height and convert to native pixels; do not use normalized 0..1000 coordinates or invent offsets. If model image preprocessing rescales the image, preserve the fractions and map back to the native dimensions above. Use full_page=false for clicking. Identify target from pixels, click once, then take and load a NEW screenshot to verify actual state change. After a miss re-estimate from fresh pixels; never repeat an unchanged failed coordinate. Stop after at most 4 clicks without success and report the limitation honestly. Never infer success from a click return alone."
+    }
+  },
+  {
+    "instance": 2,
+    "trial": 0,
+    "local": "/home/helix/.hermes-minimal/workspace/agent-zero-autonomy-tuning/screenshot-2-0-0.jpg",
+    "remote": "/a0/usr/chats/GfxInzVc/screenshots/browser/browser-2-20261021-101350-c6ebd133.jpg",
+    "geometry": {
+      "screenshot_width_pixels": 1024,
+      "screenshot_height_pixels": 768,
+      "instructions": "Load this screenshot with vision_load. For viewport screenshots, origin (0,0) is top-left of page content, NOT browser chrome. Browser click x/y use viewport CSS pixels; default device scale is 1. Estimate target center as fractions of this complete image width/height and convert to native pixels; do not use normalized 0..1000 coordinates or invent offsets. If model image preprocessing rescales the image, preserve the fractions and map back to the native dimensions above. Use full_page=false for clicking. Identify target from pixels, click once, then take and load a NEW screenshot to verify actual state change. After a miss re-estimate from fresh pixels; never repeat an unchanged failed coordinate. Stop after at most 4 clicks without success and report the limitation honestly. Never infer success from a click return alone."
+    }
+  },
+  {
+    "instance": 2,
+    "trial": 0,
+    "local": "/home/helix/.hermes-minimal/workspace/agent-zero-autonomy-tuning/screenshot-2-0-1.jpg",
+    "remote": "/a0/usr/chats/GfxInzVc/screenshots/browser/browser-2-20261021-101412-6dc74306.jpg",
+    "geometry": {
+      "screenshot_width_pixels": 1024,
+      "screenshot_height_pixels": 768,
+      "instructions": "Load this screenshot with vision_load. For viewport screenshots, origin (0,0) is top-left of page content, NOT browser chrome. Browser click x/y use viewport CSS pixels; default device scale is 1. Estimate target center as fractions of this complete image width/height and convert to native pixels; do not use normalized 0..1000 coordinates or invent offsets. If model image preprocessing rescales the image, preserve the fractions and map back to the native dimensions above. Use full_page=false for clicking. Identify target from pixels, click once, then take and load a NEW screenshot to verify actual state change. After a miss re-estimate from fresh pixels; never repeat an unchanged failed coordinate. Stop after at most 4 clicks without success and report the limitation honestly. Never infer success from a click return alone."
+    }
+  },
+  {
+    "instance": 2,
+    "trial": 0,
+    "local": "/home/helix/.hermes-minimal/workspace/agent-zero-autonomy-tuning/screenshot-2-0-2.jpg",
+    "remote": "/a0/usr/chats/GfxInzVc/screenshots/browser/browser-2-20261021-101435-4961b30e.jpg",
+    "geometry": {
+      "screenshot_width_pixels": 1024,
+      "screenshot_height_pixels": 768,
+      "instructions": "Load this screenshot with vision_load. For viewport screenshots, origin (0,0) is top-left of page content, NOT browser chrome. Browser click x/y use viewport CSS pixels; default device scale is 1. Estimate target center as fractions of this complete image width/height and convert to native pixels; do not use normalized 0..1000 coordinates or invent offsets. If model image preprocessing rescales the image, preserve the fractions and map back to the native dimensions above. Use full_page=false for clicking. Identify target from pixels, click once, then take and load a NEW screenshot to verify actual state change. After a miss re-estimate from fresh pixels; never repeat an unchanged failed coordinate. Stop after at most 4 clicks without success and report the limitation honestly. Never infer success from a click return alone."
+    }
+  },
+  {
+    "instance": 2,
+    "trial": 1,
+    "local": "/home/helix/.hermes-minimal/workspace/agent-zero-autonomy-tuning/screenshot-2-1-0.jpg",
+    "remote": "/a0/usr/chats/H7Wk67UV/screenshots/browser/browser-3-20261021-101539-200376b0.jpg",
+    "geometry": {
+      "screenshot_width_pixels": 800,
+      "screenshot_height_pixels": 600,
+      "instructions": "Load this screenshot with vision_load. For viewport screenshots, origin (0,0) is top-left of page content, NOT browser chrome. Browser click x/y use viewport CSS pixels; default device scale is 1. Estimate target center as fractions of this complete image width/height and convert to native pixels; do not use normalized 0..1000 coordinates or invent offsets. If model image preprocessing rescales the image, preserve the fractions and map back to the native dimensions above. Use full_page=false for clicking. Identify target from pixels, click once, then take and load a NEW screenshot to verify actual state change. After a miss re-estimate from fresh pixels; never repeat an unchanged failed coordinate. Stop after at most 4 clicks without success and report the limitation honestly. Never infer success from a click return alone."
+    }
+  },
+  {
+    "instance": 2,
+    "trial": 1,
+    "local": "/home/helix/.hermes-minimal/workspace/agent-zero-autonomy-tuning/screenshot-2-1-1.jpg",
+    "remote": "/a0/usr/chats/H7Wk67UV/screenshots/browser/browser-3-20261021-101640-ce8b26a0.jpg",
+    "geometry": {
+      "screenshot_width_pixels": 800,
+      "screenshot_height_pixels": 600,
+      "instructions": "Load this screenshot with vision_load. For viewport screenshots, origin (0,0) is top-left of page content, NOT browser chrome. Browser click x/y use viewport CSS pixels; default device scale is 1. Estimate target center as fractions of this complete image width/height and convert to native pixels; do not use normalized 0..1000 coordinates or invent offsets. If model image preprocessing rescales the image, preserve the fractions and map back to the native dimensions above. Use full_page=false for clicking. Identify target from pixels, click once, then take and load a NEW screenshot to verify actual state change. After a miss re-estimate from fresh pixels; never repeat an unchanged failed coordinate. Stop after at most 4 clicks without success and report the limitation honestly. Never infer success from a click return alone."
+    }
+  },
+  {
+    "instance": 2,
+    "trial": 1,
+    "local": "/home/helix/.hermes-minimal/workspace/agent-zero-autonomy-tuning/screenshot-2-1-2.jpg",
+    "remote": "/a0/usr/chats/H7Wk67UV/screenshots/browser/browser-3-20261021-101715-71f3ab35.jpg",
+    "geometry": {
+      "screenshot_width_pixels": 800,
+      "screenshot_height_pixels": 600,
+      "instructions": "Load this screenshot with vision_load. For viewport screenshots, origin (0,0) is top-left of page content, NOT browser chrome. Browser click x/y use viewport CSS pixels; default device scale is 1. Estimate target center as fractions of this complete image width/height and convert to native pixels; do not use normalized 0..1000 coordinates or invent offsets. If model image preprocessing rescales the image, preserve the fractions and map back to the native dimensions above. Use full_page=false for clicking. Identify target from pixels, click once, then take and load a NEW screenshot to verify actual state change. After a miss re-estimate from fresh pixels; never repeat an unchanged failed coordinate. Stop after at most 4 clicks without success and report the limitation honestly. Never infer success from a click return alone."
+    }
+  },
+  {
+    "instance": 2,
+    "trial": 2,
+    "local": "/home/helix/.hermes-minimal/workspace/agent-zero-autonomy-tuning/screenshot-2-2-0.jpg",
+    "remote": "/a0/usr/chats/4KqHJPP7/screenshots/browser/browser-4-20261021-101932-c3a573c7.jpg",
+    "geometry": {
+      "screenshot_width_pixels": 900,
+      "screenshot_height_pixels": 700,
+      "instructions": "Load this screenshot with vision_load. For viewport screenshots, origin (0,0) is top-left of page content, NOT browser chrome. Browser click x/y use viewport CSS pixels; default device scale is 1. Estimate target center as fractions of this complete image width/height and convert to native pixels; do not use normalized 0..1000 coordinates or invent offsets. If model image preprocessing rescales the image, preserve the fractions and map back to the native dimensions above. Use full_page=false for clicking. Identify target from pixels, click once, then take and load a NEW screenshot to verify actual state change. After a miss re-estimate from fresh pixels; never repeat an unchanged failed coordinate. Stop after at most 4 clicks without success and report the limitation honestly. Never infer success from a click return alone."
+    }
+  },
+  {
+    "instance": 2,
+    "trial": 2,
+    "local": "/home/helix/.hermes-minimal/workspace/agent-zero-autonomy-tuning/screenshot-2-2-1.jpg",
+    "remote": "/a0/usr/chats/4KqHJPP7/screenshots/browser/browser-4-20261021-102004-83af9d65.jpg",
+    "geometry": {
+      "screenshot_width_pixels": 900,
+      "screenshot_height_pixels": 700,
+      "instructions": "Load this screenshot with vision_load. For viewport screenshots, origin (0,0) is top-left of page content, NOT browser chrome. Browser click x/y use viewport CSS pixels; default device scale is 1. Estimate target center as fractions of this complete image width/height and convert to native pixels; do not use normalized 0..1000 coordinates or invent offsets. If model image preprocessing rescales the image, preserve the fractions and map back to the native dimensions above. Use full_page=false for clicking. Identify target from pixels, click once, then take and load a NEW screenshot to verify actual state change. After a miss re-estimate from fresh pixels; never repeat an unchanged failed coordinate. Stop after at most 4 clicks without success and report the limitation honestly. Never infer success from a click return alone."
+    }
+  },
+  {
+    "instance": 2,
+    "trial": 2,
+    "local": "/home/helix/.hermes-minimal/workspace/agent-zero-autonomy-tuning/screenshot-2-2-2.jpg",
+    "remote": "/a0/usr/chats/4KqHJPP7/screenshots/browser/browser-4-20261021-102034-5829866c.jpg",
+    "geometry": {
+      "screenshot_width_pixels": 900,
+      "screenshot_height_pixels": 700,
+      "instructions": "Load this screenshot with vision_load. For viewport screenshots, origin (0,0) is top-left of page content, NOT browser chrome. Browser click x/y use viewport CSS pixels; default device scale is 1. Estimate target center as fractions of this complete image width/height and convert to native pixels; do not use normalized 0..1000 coordinates or invent offsets. If model image preprocessing rescales the image, preserve the fractions and map back to the native dimensions above. Use full_page=false for clicking. Identify target from pixels, click once, then take and load a NEW screenshot to verify actual state change. After a miss re-estimate from fresh pixels; never repeat an unchanged failed coordinate. Stop after at most 4 clicks without success and report the limitation honestly. Never infer success from a click return alone."
+    }
+  },
+  {
+    "instance": 2,
+    "trial": 2,
+    "local": "/home/helix/.hermes-minimal/workspace/agent-zero-autonomy-tuning/screenshot-2-2-3.jpg",
+    "remote": "/a0/usr/chats/4KqHJPP7/screenshots/browser/browser-4-20261021-102107-32365727.jpg",
+    "geometry": {
+      "screenshot_width_pixels": 900,
+      "screenshot_height_pixels": 700,
+      "instructions": "Load this screenshot with vision_load. For viewport screenshots, origin (0,0) is top-left of page content, NOT browser chrome. Browser click x/y use viewport CSS pixels; default device scale is 1. Estimate target center as fractions of this complete image width/height and convert to native pixels; do not use normalized 0..1000 coordinates or invent offsets. If model image preprocessing rescales the image, preserve the fractions and map back to the native dimensions above. Use full_page=false for clicking. Identify target from pixels, click once, then take and load a NEW screenshot to verify actual state change. After a miss re-estimate from fresh pixels; never repeat an unchanged failed coordinate. Stop after at most 4 clicks without success and report the limitation honestly. Never infer success from a click return alone."
+    }
+  }
+]
