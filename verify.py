@@ -21,7 +21,7 @@ for i in (1,2):
    if x['kvps'].get('action')=='screenshot':
     try:
      a=json.loads(x['content']);remote=a['path'];local=P/f'screenshot-{i}-{n}-{len(screenshots)}.jpg'
-     local.write_bytes(subprocess.check_output(['ssh','root@100.108.186.69',f'docker exec agent-zero-{i} cat '+remote],timeout=30));screenshots.append(str(local));shots.append({'instance':i,'trial':n,'local':str(local),'remote':remote,'geometry':a.get('visual_geometry')})
+     local.write_bytes(subprocess.check_output(['ssh','root@<agent-zero-host>',f'docker exec agent-zero-{i} cat '+remote],timeout=30));screenshots.append(str(local));shots.append({'instance':i,'trial':n,'local':str(local),'remote':remote,'geometry':a.get('visual_geometry')})
     except (ValueError,KeyError):pass
   done=s['stage']==2 and bool(finals) and not forbidden
   latency=finals[-1]['timestamp']-req['start'] if finals else None

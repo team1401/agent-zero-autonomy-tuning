@@ -6,7 +6,7 @@ P=pathlib.Path(__file__).parent
 def run(i):
  c=Client(i);base=f'/mnt/fastssd/AppData/agent-zero-{i}/usr/workdir/autonomy-benchmark'
  ssh(f'mkdir -p {base}')
- subprocess.run(['scp',str(P/'server.py'),f'root@100.108.186.69:{base}/server.py'],check=True,capture_output=True)
+ subprocess.run(['scp',str(P/'server.py'),f'root@<agent-zero-host>:{base}/server.py'],check=True,capture_output=True)
  ssh(f'docker exec -d agent-zero-{i} /opt/venv-a0/bin/python /a0/usr/workdir/autonomy-benchmark/server.py')
  time.sleep(2)
  results=[]

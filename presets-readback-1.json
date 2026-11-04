@@ -6,7 +6,7 @@
       "chat": {
         "provider": "lm_studio",
         "name": "halogen-qwen3.8-flash-next",
-        "api_base": "http://100.108.186.69:8731/v1",
+        "api_base": "http://<agent-zero-host>:8731/v1",
         "ctx_length": 32768,
         "kwargs": {
           "temperature": 0,
@@ -24,7 +24,7 @@
       "utility": {
         "provider": "lm_studio",
         "name": "halogen-qwen3.8-flash-next",
-        "api_base": "http://100.108.186.69:8731/v1",
+        "api_base": "http://<agent-zero-host>:8731/v1",
         "ctx_length": 32768,
         "kwargs": {
           "temperature": 0.2,
@@ -53,7 +53,7 @@
       "chat": {
         "provider": "lm_studio",
         "name": "halogen-qwen3.8-flash-next",
-        "api_base": "http://100.108.186.69:8731/v1",
+        "api_base": "http://<agent-zero-host>:8731/v1",
         "ctx_length": 32768,
         "kwargs": {
           "temperature": 0,
@@ -71,7 +71,7 @@
       "utility": {
         "provider": "lm_studio",
         "name": "halogen-qwen3.8-flash-next",
-        "api_base": "http://100.108.186.69:8731/v1",
+        "api_base": "http://<agent-zero-host>:8731/v1",
         "ctx_length": 32768,
         "kwargs": {
           "temperature": 0.2,
